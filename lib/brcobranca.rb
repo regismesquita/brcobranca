@@ -97,7 +97,6 @@ module Brcobranca
   module Boleto
     autoload :Base,          'brcobranca/boleto/base'
     autoload :BancoBrasil,   'brcobranca/boleto/banco_brasil'
-    autoload :Banespa,       'brcobranca/boleto/banespa'
     autoload :Itau,          'brcobranca/boleto/itau'
     autoload :Hsbc,          'brcobranca/boleto/hsbc'
     autoload :Real,          'brcobranca/boleto/real'
@@ -105,6 +104,7 @@ module Brcobranca
     autoload :Unibanco,      'brcobranca/boleto/unibanco'
     autoload :Caixa,         'brcobranca/boleto/caixa'
     autoload :Sicredi,         'brcobranca/boleto/sicredi'
+    autoload :Santander,     'brcobranca/boleto/santander'
 
     # Módulos para classes de template
     module Template

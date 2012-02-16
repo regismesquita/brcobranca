@@ -80,6 +80,7 @@ module Brcobranca
       self.gerador = :rghost
       self.formato = :pdf
       self.resolucao = 150
+      self.external_encoding = 'ascii-8bit' if  RUBY_VERSION =~ /^1\.9/
     end
   end
 

@@ -65,6 +65,12 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.valid?.should be_true
       end
 
+      it "should create a new bank slip with non-default logo path" do
+        logotipo = Object.new
+        boleto_novo = Brcobranca::Boleto::Base.new({},{:logotipo => logotipo})
+        boleto_novo.logotipo.should equal logotipo
+      end
+
       it "Calcula agencia_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.agencia = "85068014982"

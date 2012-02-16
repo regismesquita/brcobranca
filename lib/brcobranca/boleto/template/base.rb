@@ -5,7 +5,7 @@ module Brcobranca
         extend self
 
         def define_template(template)
-          (template == :rghost) ? Brcobranca::Boleto::Template::Rghost : Brcobranca::Boleto::Template::Rghost
+          Brcobranca::Boleto::Template.const_get(template.capitalize)
         end
       end
     end

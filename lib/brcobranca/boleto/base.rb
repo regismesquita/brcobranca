@@ -78,7 +78,9 @@ module Brcobranca
 
       # Nova instancia da classe Base
       # @param [Hash] campos
-      def initialize(campos={})
+      def initialize(campos={},style={})
+        @logotipo = style.delete(:logotipo)
+
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
           :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
@@ -96,7 +98,7 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.jpg")
+        @logotipo ||= File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.jpg")
       end
 
       # Dígito verificador do banco

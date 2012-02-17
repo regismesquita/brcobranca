@@ -25,36 +25,11 @@ module Brcobranca
         include RGhost unless self.include?(RGhost)
         RGhost::Config::GS[:external_encoding] = Brcobranca.configuration.external_encoding
 
-        # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
-        #
-        # @return [Stream]
-        # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
-        # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
-        def to(formato, options={})
-          modelo_generico(self, options.merge!({:formato => formato}))
-        end
-
-        # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
-        #
-        # @return [Stream]
-        # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
-        # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
-        def lote(boletos, options={})
-          modelo_generico_multipage(boletos, options)
-        end
-
-        #  Cria o métodos dinâmicos (to_pdf, to_gif e etc) com todos os fomátos válidos.
-        #
-        # @return [Stream]
-        # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
-        # @example
-        #  @boleto.to_pdf #=> boleto gerado no formato pdf
-        def method_missing(m, *args)
-          method = m.to_s
-          if method.start_with?("to_")
-            modelo_generico(self, (args.first || {}).merge!({:formato => method[3..-1]}))
+        def generate(boleto, options)
+          if boleto.is_a? Array
+            modelo_generico_multipage(boleto, options)
           else
-            super
+            modelo_generico(boleto, options)
           end
         end
 
@@ -221,7 +196,6 @@ module Brcobranca
           doc.show "#{boleto.sacado_endereco}"
           #FIM Segunda parte do BOLETO
         end
-
       end #Base
     end
   end

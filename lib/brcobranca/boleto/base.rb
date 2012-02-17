@@ -4,12 +4,6 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
-      extend Template::Base
-
-      # Configura gerador de arquivo de boleto e código de barras.
-      extend define_template(Brcobranca.configuration.gerador)
-      include define_template(Brcobranca.configuration.gerador)
-
       # Validações do Rails 3
       include ActiveModel::Validations
 
@@ -94,6 +88,43 @@ module Brcobranca
         end
 
         yield self if block_given?
+      end
+
+      # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
+      #
+      # @return [Stream]
+      # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
+      # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
+      def to(formato, options={})
+        template.generate(self, options.merge(:formato => formato))
+      end
+
+      # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
+      #
+      # @return [Stream]
+      # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
+      # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
+      def lote(boletos, options={})
+        template.generate(boletos, options)
+      end
+
+      def self.lote(boletos, options={}, template=default_template)
+        template.generate(boletos, options)
+      end
+
+      #  Cria o métodos dinâmicos (to_pdf, to_gif e etc) com todos os fomátos válidos.
+      #
+      # @return [Stream]
+      # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
+      # @example
+      #  @boleto.to_pdf #=> boleto gerado no formato pdf
+      def method_missing(m, *args)
+        method = m.to_s
+        if method.start_with?("to_")
+          template.generate(self, (args.first || {}).merge!({:formato => method[3..-1]}))
+        else
+          super
+        end
       end
 
       # Logotipo do banco
@@ -203,6 +234,19 @@ module Brcobranca
         raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
+      def template
+        @template ||= self.class.default_template
+      end
+
+      # <b>OPTIONAL</b>: Select a different template for generating the bank slip
+      def template=(template)
+        @template = Brcobranca::Boleto::Template.const_get(template.capitalize)
+      end
+
+      def self.default_template
+        Brcobranca::Boleto::Template::Rghost
+      end
+
       private
 
       # Monta a primeira parte do código de barras, que é a mesma para todos bancos.
@@ -222,7 +266,6 @@ module Brcobranca
       def class_name
         self.class.to_s.split("::").last.downcase
       end
-
     end
   end
 end

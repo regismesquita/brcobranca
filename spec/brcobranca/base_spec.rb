@@ -71,6 +71,19 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.logotipo.should equal logotipo
       end
 
+      it "should create a new bank slip with rghost as template if none is passed" do
+        logotipo = Object.new
+        boleto_novo = Brcobranca::Boleto::Base.new
+        boleto_novo.template.should equal Brcobranca::Boleto::Template::Rghost
+      end
+
+      it "should create a new bank slip with non-default template" do
+        Brcobranca::Boleto::Template.const_set(:Bogus, Object.new)
+        template = Brcobranca::Boleto::Template::Bogus
+        boleto_novo = Brcobranca::Boleto::Base.new({:template => :bogus})
+        boleto_novo.template.should equal template
+      end
+
       it "Calcula agencia_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.agencia = "85068014982"
@@ -175,17 +188,15 @@ module Brcobranca #:nodoc:[all]
         lambda { boleto_novo.agencia_conta_boleto }.should raise_error(Brcobranca::NaoImplementado, "Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      it "Incluir módulos de template na classe" do
+      it "Metodo para gerar multiplos boletos na classe" do
         Brcobranca::Boleto::Base.respond_to?(:lote).should be_true
-        Brcobranca::Boleto::Base.respond_to?(:to).should be_true
       end
 
-      it "Incluir módulos de template na instancia" do
+      it "should access the template and generate the boleto passing the params." do
         boleto_novo = Brcobranca::Boleto::Base.new
         boleto_novo.respond_to?(:lote).should be_true
         boleto_novo.respond_to?(:to).should be_true
       end
-
     end
   end
 end

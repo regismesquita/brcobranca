@@ -91,7 +91,7 @@ module Brcobranca
 
   # Módulo para classes de boletos
   module Boleto
-    autoload :Html,          'brcobranca/boleto/base'
+    autoload :Base,          'brcobranca/boleto/base'
     autoload :BancoBrasil,   'brcobranca/boleto/banco_brasil'
     autoload :Itau,          'brcobranca/boleto/itau'
     autoload :Hsbc,          'brcobranca/boleto/hsbc'
@@ -111,7 +111,7 @@ module Brcobranca
 
   # Módulos para classes de retorno bancário
   module Retorno
-    autoload :Html,           'brcobranca/retorno/base'
+    autoload :Base,           'brcobranca/retorno/base'
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
     autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
   end

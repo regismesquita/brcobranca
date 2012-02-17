@@ -67,7 +67,7 @@ module Brcobranca #:nodoc:[all]
 
       it "should create a new bank slip with non-default logo path" do
         logotipo = Object.new
-        boleto_novo = Brcobranca::Boleto::Base.new({},{:logotipo => logotipo})
+        boleto_novo = Brcobranca::Boleto::Base.new({:logotipo => logotipo})
         boleto_novo.logotipo.should equal logotipo
       end
 

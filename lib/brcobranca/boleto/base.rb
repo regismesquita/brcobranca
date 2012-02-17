@@ -71,6 +71,8 @@ module Brcobranca
       attr_accessor :sacado_endereco
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
       attr_accessor :sacado_documento
+      # <b>OPTIONAL</b>: Personalized logo to bank slip
+      attr_writer :logotipo
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
@@ -78,8 +80,7 @@ module Brcobranca
 
       # Nova instancia da classe Base
       # @param [Hash] campos
-      def initialize(campos={},style={})
-        @logotipo = style.delete(:logotipo)
+      def initialize(campos={})
 
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,

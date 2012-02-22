@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<rghost_barcode>, [">= 0.8"])
   s.add_runtime_dependency(%q<parseline>, [">= 1.0.3"])
   s.add_runtime_dependency(%q<activemodel>, [">= 3.0.0"])
-  s.add_runtime_dependency(%q<barby>, [">= 0.5.0"])
 
   s.post_install_message = %[
     ===========================================================================

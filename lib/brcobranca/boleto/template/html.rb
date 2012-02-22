@@ -28,9 +28,7 @@ module Brcobranca
         private
 
         def modelo_generico(boleto, options={})
-          barcode = Barby::Code25Interleaved.new(self.codigo_barras)
-          imagem_codigo_barras = Base64.encode64(barcode.to_png(:width => 480, :height => 50, :margin => 0))
-          options.merge(:locals => {:boleto => boleto, :imagem_codigo_barras => imagem_codigo_barras })
+          #TODO: Render bank slip
         end
 
         def modelo_generico_multipage(boletos, options={})
